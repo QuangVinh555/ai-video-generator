@@ -11,6 +11,8 @@ class AudioRequest(BaseModel):
 class SceneData(BaseModel):
     audioUrl: str
     selectedImage: str
+    narration: Optional[str] = None
+    image_keyword: Optional[str] = None
 
 class RenderRequest(BaseModel):
     title: str

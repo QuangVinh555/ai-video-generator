@@ -20,7 +20,9 @@ export default function Timeline({ scriptData, scenes, setScenes }) {
     try {
       const formattedScenes = scenes.map(s => ({
         audioUrl: s.audioUrl,
-        selectedImage: s.selectedImage
+        selectedImage: s.selectedImage,
+        narration: s.narration,
+        image_keyword: s.image_keyword
       }));
       const data = await renderVideoAPI(scriptData.title, formattedScenes, bgmUrl || null);
       setVideoUrl(data.video_url);
