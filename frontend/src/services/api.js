@@ -36,3 +36,10 @@ export const renderVideoAPI = async (title, scenes, bgmUrl) => {
   if (!res.ok) throw new Error(data.detail || "Lỗi render");
   return data;
 };
+
+export const checkTaskStatusAPI = async (taskId) => {
+  const res = await fetch(`${API_BASE}/tasks/${taskId}`);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.detail || "Error checking task status");
+  return data;
+};

@@ -131,8 +131,11 @@ def render_video_service(scenes_data: list, bgm_url: str = None):
         img_path = f"assets/images/tmp_{uuid.uuid4().hex[:6]}.{img_ext}"
         os.makedirs(os.path.dirname(img_path), exist_ok=True)
         
-        headers = {"User-Agent": "AIVideoGenMVP/1.0"}
-        res = requests.get(scene.selectedImage, headers=headers)
+        headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+        res = requests.get(scene.selectedImage, headers=headers, timeout=10)
+        if res.status_code != 200:
+            raise Exception(f"Không thể tải ảnh từ URL: {scene.selectedImage} (Mã lỗi: {res.status_code}). URL này có thể đã bị chặn hoặc hết hạn.")
+            
         with open(img_path, "wb") as f:
             f.write(res.content)
         

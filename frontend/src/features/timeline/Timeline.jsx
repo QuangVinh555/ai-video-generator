@@ -1,11 +1,36 @@
 import React, { useState } from 'react';
 import SceneCard from './SceneCard';
-import { renderVideoAPI } from '../../services/api';
+import { renderVideoAPI, checkTaskStatusAPI } from '../../services/api';
 
 export default function Timeline({ scriptData, scenes, setScenes }) {
   const [renderLoading, setRenderLoading] = useState(false);
   const [videoUrl, setVideoUrl] = useState(null);
   const [bgmUrl, setBgmUrl] = useState("");
+  const [renderMessage, setRenderMessage] = useState("");
+
+  const pollTaskStatus = async (taskId) => {
+    try {
+      const statusData = await checkTaskStatusAPI(taskId);
+      if (statusData.task_status === 'SUCCESS') {
+        setVideoUrl(statusData.task_result.video_url);
+        setRenderLoading(false);
+        setRenderMessage("");
+      } else if (statusData.task_status === 'FAILURE') {
+        alert("Lỗi khi tạo video: " + statusData.task_result);
+        setRenderLoading(false);
+        setRenderMessage("");
+      } else {
+        // PROCESSING, PENDING, etc.
+        if (statusData.meta && statusData.meta.message) {
+          setRenderMessage(`${statusData.meta.message} (${statusData.meta.progress || 0}%)`);
+        }
+        setTimeout(() => pollTaskStatus(taskId), 3000);
+      }
+    } catch (err) {
+      alert("Lỗi kiểm tra trạng thái: " + err);
+      setRenderLoading(false);
+    }
+  };
 
   const handleRenderVideo = async () => {
     for (let i = 0; i < scenes.length; i++) {
@@ -17,6 +42,7 @@ export default function Timeline({ scriptData, scenes, setScenes }) {
     
     setRenderLoading(true);
     setVideoUrl(null);
+    setRenderMessage("Đang đưa vào hàng đợi xử lý ngầm...");
     try {
       const formattedScenes = scenes.map(s => ({
         audioUrl: s.audioUrl,
@@ -25,11 +51,15 @@ export default function Timeline({ scriptData, scenes, setScenes }) {
         image_keyword: s.image_keyword
       }));
       const data = await renderVideoAPI(scriptData.title, formattedScenes, bgmUrl || null);
-      setVideoUrl(data.video_url);
+      
+      const taskId = data.task_id;
+      pollTaskStatus(taskId);
+      
     } catch (err) {
-      alert("Lỗi Render: " + err);
+      alert("Lỗi Gọi API Render: " + err);
+      setRenderLoading(false);
+      setRenderMessage("");
     }
-    setRenderLoading(false);
   };
 
   return (
@@ -82,7 +112,7 @@ export default function Timeline({ scriptData, scenes, setScenes }) {
               onClick={handleRenderVideo}
               disabled={renderLoading}
             >
-              {renderLoading ? '⏳ Đang Render (Chờ 1-2 phút)...' : '🎞️ XUẤT VIDEO'}
+              {renderLoading ? (renderMessage || '⏳ Đang Render...') : '🎞️ XUẤT VIDEO'}
             </button>
           </div>
           
