@@ -26,11 +26,11 @@ export const searchImagesAPI = async (keyword) => {
   return res.json();
 };
 
-export const renderVideoAPI = async (title, scenes) => {
+export const renderVideoAPI = async (title, scenes, bgmUrl) => {
   const res = await fetch(`${API_BASE}/render-video`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ title, scenes })
+    body: JSON.stringify({ title, scenes, bgmUrl })
   });
   const data = await res.json();
   if (!res.ok) throw new Error(data.detail || "Lỗi render");

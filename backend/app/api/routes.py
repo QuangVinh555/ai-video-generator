@@ -40,7 +40,7 @@ def search_images(query: str, limit: int = 5):
 @router.post("/api/render-video")
 def render_video(request: RenderRequest):
     try:
-        filename, filepath = render_video_service(request.scenes)
+        filename, filepath = render_video_service(request.scenes, request.bgmUrl)
         return {"video_url": f"http://127.0.0.1:8000/{filepath}"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

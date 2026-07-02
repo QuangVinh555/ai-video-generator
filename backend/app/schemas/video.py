@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 
 class ScriptRequest(BaseModel):
     topic: str
@@ -15,3 +15,4 @@ class SceneData(BaseModel):
 class RenderRequest(BaseModel):
     title: str
     scenes: List[SceneData]
+    bgmUrl: Optional[str] = None

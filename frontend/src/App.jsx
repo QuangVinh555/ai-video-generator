@@ -21,20 +21,18 @@ function App() {
   };
 
   return (
-    <div className="container">
-      <div className="glass-card">
-        <h1 className="title">✨ AI Video Creator</h1>
-        
-        <ScriptGenerator onScriptGenerated={handleScriptGenerated} />
+    <div className="container main-layout">
+      <h1 className="app-title">✨ Studio Tạo Video AI Pro</h1>
+      
+      <ScriptGenerator onScriptGenerated={handleScriptGenerated} />
 
-        {scriptData && (
-          <Timeline 
-            scriptData={scriptData} 
-            scenes={scenes} 
-            setScenes={setScenes} 
-          />
-        )}
-      </div>
+      {scriptData && (
+        <Timeline 
+          scriptData={scriptData} 
+          scenes={scenes} 
+          setScenes={setScenes} 
+        />
+      )}
     </div>
   );
 }

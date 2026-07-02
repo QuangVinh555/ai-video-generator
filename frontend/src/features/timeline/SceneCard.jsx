@@ -57,12 +57,13 @@ export default function SceneCard({ scene, index, scenes, setScenes }) {
       <div className="scene-header">
         <span className="scene-number">Phân cảnh {scene.scene_number}</span>
         <div style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
-          <span style={{color: '#94a3b8', fontSize: '0.9rem'}}>Từ khóa:</span>
+          <span style={{color: 'var(--text-muted)', fontSize: '0.9rem'}}>Từ khóa:</span>
           <input 
             type="text" 
+            className="form-input"
             value={scene.image_keyword || ""} 
             onChange={(e) => updateKeyword(e.target.value)}
-            style={{background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: 'white', padding: '4px 12px', borderRadius: '20px', outline: 'none', fontSize: '0.9rem', width: '150px'}}
+            style={{ padding: '4px 12px', fontSize: '0.9rem', width: '200px' }}
           />
         </div>
       </div>
@@ -78,7 +79,7 @@ export default function SceneCard({ scene, index, scenes, setScenes }) {
           
           <div className="scene-actions">
             <button 
-              className="action-btn"
+              className="btn btn-primary"
               onClick={generateAudio}
               disabled={scene.isGeneratingAudio}
             >
@@ -96,13 +97,13 @@ export default function SceneCard({ scene, index, scenes, setScenes }) {
             {scene.selectedImage ? (
               <img src={scene.selectedImage} alt="preview" />
             ) : (
-              <span style={{color: '#64748b'}}>Chưa có hình ảnh</span>
+              <span style={{color: 'var(--text-muted)'}}>Chưa có hình ảnh</span>
             )}
           </div>
           
           <div className="scene-actions" style={{justifyContent: 'center'}}>
             <button 
-              className="action-btn primary"
+              className="btn btn-secondary"
               onClick={searchImages}
               disabled={scene.isSearchingImages}
             >
