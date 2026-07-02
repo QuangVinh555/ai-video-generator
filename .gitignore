@@ -1,0 +1,10 @@
+# Node/Frontend
+node_modules/
+dist/
+.env
+
+# Python/Backend (nếu dùng Python)
+venv/
+env/
+__pycache__/
+*.pyc
